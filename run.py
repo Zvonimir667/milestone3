@@ -4,7 +4,7 @@ import random
 class BattleshipGame:
 
     
-    ships = {'Carrier': 5, 'Battleship': 4, 'Cruiser': 3, 'Submarine': 3, 'Destroyer': 2}
+    ships = {'Carrier': 1, 'Battleship': 1, 'Cruiser': 1, 'Submarine': 1, 'Destroyer': 1}
 
     def __init__(self, size=5):
         """
