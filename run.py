@@ -45,3 +45,18 @@ class BattleshipGame:
                     for i in range(size):
                         self.board[row + i][col] = 'S'
                     break
+
+    def take_shot(self, guess):
+        """
+        Take a shot at the specified location on the game board
+        """
+        row, col = guess
+        if self.board[row][col] == 'S':
+            hit_ship = self.get_ship_name(row, col)
+            self.board[row][col] = 'X'  # 'X' represents a hit
+            print(f"Hit! The computer hit your {hit_ship}")
+            return True
+        elif self.board[row][col] == 'O':
+            self.board[row][col] = '/'
+            print("Computer Missed!")
+            return False
