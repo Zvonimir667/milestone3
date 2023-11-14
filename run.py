@@ -2,21 +2,26 @@ import random
 
 
 class BattleshipGame:
-    def board(self, size=5):
+
+    
+    ships = {'Carrier': 5, 'Battleship': 4, 'Cruiser': 3, 'Submarine': 3, 'Destroyer': 2}
+
+    def __init__(self, size=5):
         """
-        Initialize the Battleship game with an empty board
+        Initialize the Battleship game with a given board size and an empty board.
         """
         self.size = size
         self.board = [['O' for _ in range(size)] for _ in range(size)]
-        self.ships = {'Carrier': 5, 'Battleship': 4, 'Cruiser': 3, 'Submarine': 3, 'Destroyer': 2}
+        self.ships = BattleshipGame.ships.copy()
 
-    def print_board(self, hide_ship=False):
+    def print_board(self, hide_ships=False):
         """
-        Print the game board, hiding ships on the board
+        Print the game board, optionally hiding ships on the board.
         """
         for row in self.board:
             print(' '.join(['X' if cell == 'S' and hide_ships else cell for cell in row]))
         print()
+
     
     def place_ships(self):
         """
@@ -30,6 +35,7 @@ class BattleshipGame:
         Place a single ship on the game board.
         """
         while True:
+            size = self.ships[ship]
             orientation = random.choice(['horizontal', 'vertical'])
             if orientation == 'horizontal':
                 row = random.randint(0, self.size - 1)
@@ -46,6 +52,7 @@ class BattleshipGame:
                         self.board[row + i][col] = 'S'
                     break
 
+
     def take_shot(self, guess):
         """
         Take a shot at the specified location on the game board
@@ -57,8 +64,11 @@ class BattleshipGame:
             print(f"Hit! The computer hit your {hit_ship}")
             return True
         elif self.board[row][col] == 'O':
-            self.board[row][col] = '/'
+            self.board[row][col] = '/' # '/' represents a miss
             print("Computer Missed!")
+            return False
+        elif self.board[row][col] == 'X' or self.board[row][col] == '/':
+            print("You already shot there. Try again.")
             return False
 
     def get_ship_name(self, row, col):
@@ -68,6 +78,7 @@ class BattleshipGame:
         for ship, size in self.ships.items():
             if self.is_ship_hit(row, col, ship, size):
                 return ship
+        return ""
 
     def is_ship_hit(self, row, col, ship, size):
         """
@@ -79,17 +90,18 @@ class BattleshipGame:
             return True
         return False
 
-    def get_user_guess():
+    def get_user_guess(self):
         """
-        Get the user's guess for a shot
+        Get the user's guess for a shot on the game board.
+        :return: A list containing the row and column indices of the guess.
         """
         while True:
-        try:
-            guess = input("Enter your guess (row and column, separated by a space):\n").split()
-            guess = [int(coord) for coord in guess]
-            return guess
-        except (ValueError, IndexError):
-            print("Invalid input. Please enter valid row and column values.")
+            try:
+                guess = input("Enter your guess (row and column, separated by a space): ").split()
+                guess = [int(coord) for coord in guess]
+                return guess
+            except (ValueError, IndexError):
+                print("Invalid input. Please enter valid row and column values.")
         
 def play_battleship():
     """
@@ -105,7 +117,7 @@ def play_battleship():
     while any('S' in row for row in computer.board) and any('S' in row for row in game.board):
         print("\nYour Board:")
         game.print_board()
-        user_guess = get_user_guess()
+        user_guess = game.get_user_guess()  # Change this line
         if not (0 <= user_guess[0] < game.size and 0 <= user_guess[1] < game.size):
             print("Invalid guess. Please enter valid row and column values.")
             continue
@@ -118,6 +130,7 @@ def play_battleship():
         computer_guess = [random.randint(0, game.size - 1), random.randint(0, game.size - 1)]
         if computer.take_shot(computer_guess):
             computer_attempts += 1
+
 
     if all('S' not in row for row in computer.board):
         print("\nCongratulations! You won the game!.")
