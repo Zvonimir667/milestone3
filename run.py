@@ -90,3 +90,42 @@ class BattleshipGame:
             return guess
         except (ValueError, IndexError):
             print("Invalid input. Please enter valid row and column values.")
+        
+def play_battleship():
+    """
+    Play the Battleship game with the user and computer taking turns
+    """
+    game = BattleshipGame()
+    game.place_ships()
+    computer = BattleshipGame()
+    computer.place_ships()
+    user_attempts = 0
+    computer_attempts = 0
+
+    while any('S' in row for row in computer.board) and any('S' in row for row in game.board):
+        print("\nYour Board:")
+        game.print_board()
+        user_guess = get_user_guess()
+        if not (0 <= user_guess[0] < game.size and 0 <= user_guess[1] < game.size):
+            print("Invalid guess. Please enter valid row and column values.")
+            continue
+
+        if game.take_shot(user_guess):
+            user_attempts += 1
+
+        print("\nComputer's Board:")
+        computer.print_board(hide_ships=True)
+        computer_guess = [random.randint(0, game.size - 1), random.randint(0, game.size - 1)]
+        if computer.take_shot(computer_guess):
+            computer_attempts += 1
+
+    if all('S' not in row for row in computer.board):
+        print("\nCongratulations! You won the game!.")
+    else:
+        print("\nSorry, the computer won. Better luck next time!")
+
+    print(f"\nYour Attempts: {user_attempts}")
+    print(f"Computer's Attempts: {computer_attempts}")
+
+if __name__ == "__main__":
+    play_battleship()
