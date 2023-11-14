@@ -60,3 +60,21 @@ class BattleshipGame:
             self.board[row][col] = '/'
             print("Computer Missed!")
             return False
+
+    def get_ship_name(self, row, col):
+        """
+        Get the name of the ship at the specified location
+        """
+        for ship, size in self.ships.items():
+            if self.is_ship_hit(row, col, ship, size):
+                return ship
+
+    def is_ship_hit(self, row, col, ship, size):
+        """
+        Check if a ship is hit
+        """
+        if all(0 <= row < self.size and 0 <= col + i < self.size and self.board[row][col + i] == 'X' for i in range(size)):
+            return True
+        elif all(0 <= row + i < self.size and 0 <= col < self.size and self.board[row + i][col] == 'X' for i in range(size)):
+            return True
+        return False
