@@ -85,7 +85,7 @@ class BattleshipGame:
         """
         while True:
         try:
-            guess = input("Enter your guess (row and column, separated by a space): ").split()
+            guess = input("Enter your guess (row and column, separated by a space):\n").split()
             guess = [int(coord) for coord in guess]
             return guess
         except (ValueError, IndexError):
@@ -128,4 +128,4 @@ def play_battleship():
     print(f"Computer's Attempts: {computer_attempts}")
 
 if __name__ == "__main__":
-    play_battleship()
+    play_battleship() 
