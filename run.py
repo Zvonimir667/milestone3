@@ -78,3 +78,15 @@ class BattleshipGame:
         elif all(0 <= row + i < self.size and 0 <= col < self.size and self.board[row + i][col] == 'X' for i in range(size)):
             return True
         return False
+
+    def get_user_guess():
+        """
+        Get the user's guess for a shot
+        """
+        while True:
+        try:
+            guess = input("Enter your guess (row and column, separated by a space): ").split()
+            guess = [int(coord) for coord in guess]
+            return guess
+        except (ValueError, IndexError):
+            print("Invalid input. Please enter valid row and column values.")
